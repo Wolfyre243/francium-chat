@@ -8,10 +8,36 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  app:
-    build:
-      context: .
-      target: final
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_model_storage:/usr/share/ollama/.ollama/models
+    ports:
+      - 11434:11434
+  chroma:
+    image: chromadb/chroma:latest
+    volumes:
+      - chroma-data:/chromadb/data
+    ports:
+      - 8000:8000
+  francium-chat:
+    image: francium-chat:v0.1.9
+    ports:
+      - 3000:3000
+    build: .
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./app/package.json
+
+volumes:
+  ollama_model_storage:
+  chroma-data:
     # If your application exposes a port, uncomment the following lines and change
     # the port numbers as needed. The first number is the host port and the second
     # is the port inside the container.
