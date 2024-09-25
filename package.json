@@ -1,6 +1,6 @@
 {
   "name": "francium-chat-mk1",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,17 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@langchain/community": "^0.3.3",
     "@langchain/core": "^0.3.3",
     "@langchain/ollama": "^0.1.0",
     "@nanostores/react": "github:ai/react",
     "ai": "^3.4.1",
     "langchain": "^0.3.2",
     "next": "^14.2.13",
+    "pg": "^8.13.0",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pg": "^8.11.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",

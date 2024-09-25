@@ -22,11 +22,10 @@ services:
   # This will be the brain of our ecosystem and all memory will be stored here
   pgvector:
     image: pgvector/pgvector:0.7.4-pg16
+    hostname: 127.0.0.1
     ports:
       - 5432:5432
-    restart: always
     environment:
-      - POSTGRES_DB=postgres-vectordb
       - POSTGRES_USER=francium-admin
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
     secrets:
@@ -49,7 +48,7 @@ services:
   # Start the Francium Chat application.
   # This is a simple chat interface to test and run the Ollama LLMs.
   francium-chat:
-    image: francium-chat:v0.1.9
+    image: francium-chat:v0.2.0
     ports:
       - 3000:3000
     build: .
