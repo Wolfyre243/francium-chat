@@ -86,7 +86,7 @@ export async function POST(req: Request) {
 
         const ollama = new Ollama({
             baseUrl: 'http://host.docker.internal:11434', // This should probably be an env variable
-            model: 'aegis:v0.1',
+            model: 'aegis:v0.3',
             keepAlive: '30m'
         });
 
