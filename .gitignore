@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#secrets
+secrets
+
+#storage
+pgvector-db-storage
+data
+init.sql
+ollama_model_storage

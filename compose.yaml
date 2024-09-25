@@ -8,18 +8,46 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
+
+  # Start the Ollama LLM service.
+  # This is the backbone of almost all the apps in the ecosystem.
   ollama:
     image: ollama/ollama:latest
     volumes:
-      - ollama_model_storage:/usr/share/ollama/.ollama/models
+      - ./ollama_model_storage:/usr/share/ollama/.ollama/models
     ports:
       - 11434:11434
-  chroma:
-    image: chromadb/chroma:latest
-    volumes:
-      - chroma-data:/chromadb/data
+
+  # Start the pgveector database.
+  # This will be the brain of our ecosystem and all memory will be stored here
+  pgvector:
+    image: pgvector/pgvector:0.7.4-pg16
     ports:
-      - 8000:8000
+      - 5432:5432
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres-vectordb
+      - POSTGRES_USER=francium-admin
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    secrets:
+      - db-password
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Start the pgAdmin web UI.
+  # This is a useful tool for managing your PostgreSQL database.
+  pgadmin4:
+    image: dpage/pgadmin4
+    ports:
+      - 8080:80
+      - 443:443
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=wolfyreblueflare@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD_FILE=/run/secrets/db-password
+
+  # Start the Francium Chat application.
+  # This is a simple chat interface to test and run the Ollama LLMs.
   francium-chat:
     image: francium-chat:v0.1.9
     ports:
@@ -35,9 +63,10 @@ services:
         - action: rebuild
           path: ./app/package.json
 
-volumes:
-  ollama_model_storage:
-  chroma-data:
+# Store and load passwords
+secrets:
+  db-password:
+    file: ./secrets/db-password.txt
     # If your application exposes a port, uncomment the following lines and change
     # the port numbers as needed. The first number is the host port and the second
     # is the port inside the container.

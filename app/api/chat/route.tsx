@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
         const ollama = new Ollama({
             baseUrl: 'http://host.docker.internal:11434', // This should probably be an env variable
-            model: 'umbra-v0.4',
+            model: 'aegis:v0.1',
             keepAlive: '30m'
         });
 
